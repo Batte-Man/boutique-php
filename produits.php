@@ -6,7 +6,7 @@ $limit = 12;
 $offset = ($page - 1) * $limit;
 
 $stmt = $conn->prepare(
-    "SELECT SQL_CALC_FOUND_ROWS id, nom, photo_produit, prix, evaluation_moyenne
+    "SELECT id, nom, photo_produit, prix, evaluation_moyenne
      FROM produits
      WHERE statut = 'disponible'
      ORDER BY date_ajout DESC
@@ -16,7 +16,8 @@ $stmt->bind_param('ii', $offset, $limit);
 $stmt->execute();
 $products = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$total = $conn->query("SELECT FOUND_ROWS() as t")->fetch_assoc()['t'];
+// SQL_CALC_FOUND_ROWS / FOUND_ROWS() sont dépréciés depuis MySQL 8.0.17
+$total = (int) $conn->query("SELECT COUNT(*) AS t FROM produits WHERE statut = 'disponible'")->fetch_assoc()['t'];
 $totalPages = ceil($total / $limit);
 ?>
 <!DOCTYPE html>

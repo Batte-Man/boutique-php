@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db.php';
+require_once 'auth.php';
 
 if (!empty($_SESSION['user_id'])) {
     header('Location: admin.php');
@@ -35,6 +35,7 @@ unset($_SESSION['error']);
                 <div class="alert alert-danger"><?= htmlspecialchars($error, ENT_QUOTES) ?></div>
             <?php endif; ?>
             <form method="post" action="auth.php">
+                <?= csrf_field() ?>
                 <div class="mb-3">
                     <label for="login" class="form-label">Login</label>
                     <input type="text" id="login" name="login" class="form-control" required autofocus>

@@ -11,6 +11,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_role'] !== 'gerant') {
 
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_verify();
     $nom    = trim($_POST['nom'] ?? '');
     $desc   = trim($_POST['description'] ?? '');
     $prix   = floatval($_POST['prix'] ?? 0);
@@ -93,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </ul></div>
     <?php endif; ?>
     <form method="post" action="" enctype="multipart/form-data">
+        <?= csrf_field() ?>
         <div class="mb-3">
             <label class="form-label">Nom</label>
             <input type="text" name="nom" class="form-control" value="<?= htmlspecialchars($_POST['nom'] ?? '', ENT_QUOTES) ?>" required>

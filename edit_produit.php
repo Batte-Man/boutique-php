@@ -20,6 +20,7 @@ if (!$p) { http_response_code(404); exit('Produit introuvable'); }
 
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action']==='update') {
+    csrf_verify();
 
     $nom   = trim($_POST['nom'] ?? '');
     $desc  = trim($_POST['description'] ?? '');
@@ -85,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </ul></div>
     <?php endif; ?>
     <form method="post" action="edit_produit.php">
+        <?= csrf_field() ?>
         <input type="hidden" name="id" value="<?= $id ?>">
         <input type="hidden" name="action" value="update">
         <div class="mb-3">

@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     if ($desc==='')   $errors[] = 'La description est requise.';
     if ($prix<=0)     $errors[] = 'Le prix doit être supérieur à 0.';
     if ($stock<0)     $errors[] = 'Le stock doit être ≥ 0.';
+    if ($eval < 0 || $eval > 5) $errors[] = 'L\'évaluation doit être entre 0 et 5.';
 
     if (!$errors) {
         if ($_SESSION['user_role']==='assistant') {
@@ -43,9 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $upd->bind_param('si',$desc,$id);
         } else {
             $upd = $conn->prepare(
-                'UPDATE produits SET nom=?, description=?, prix=?, quantite_en_stock=?, statut=?, categorie=? WHERE id=?'
+                'UPDATE produits SET nom=?, description=?, prix=?, quantite_en_stock=?, statut=?, categorie=?, marque=?, evaluation_moyenne=? WHERE id=?'
             );
-            $upd->bind_param('ssdissi',$nom,$desc,$prix,$stock,$statut,$categorie,$id);
+            $upd->bind_param('ssdisssdi',$nom,$desc,$prix,$stock,$statut,$categorie,$marque,$eval,$id);
         }
         if ($upd->execute()) {
             header('Location: admin.php'); exit;

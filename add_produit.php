@@ -17,13 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stock  = intval($_POST['quantite_en_stock'] ?? 0);
     $marque = trim($_POST['marque'] ?? '');
     $eval   = floatval($_POST['evaluation_moyenne'] ?? 0);
+    $categorie = trim($_POST['categorie'] ?? '');
     $statut = in_array($_POST['statut'] ?? '', ['disponible','indisponible'], true)
         ? $_POST['statut'] : 'disponible';
-
-    [$filename, $erreurPhoto] = enregistrer_photo($_FILES['photo'] ?? [], __DIR__ . '/img');
-    if ($erreurPhoto !== null) {
-        $errors[] = $erreurPhoto;
-    }
 
     if ($nom === '')    $errors[] = 'Le nom est requis.';
     if ($desc === '')   $errors[] = 'La description est requise.';
@@ -31,6 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($prix <= 0)     $errors[] = 'Le prix doit être supérieur à 0.';
     if ($stock < 0)     $errors[] = 'La quantité en stock doit être ≥ 0.';
     if ($eval < 0 || $eval > 5) $errors[] = 'L\'évaluation doit être entre 0 et 5.';
+    if ($categorie === '') $errors[] = 'La catégorie est requise.';
+
+    // La photo n'est enregistrée que si le reste du formulaire est valide (pas de fichier orphelin)
+    if (empty($errors)) {
+        [$filename, $erreurPhoto] = enregistrer_photo($_FILES['photo'] ?? [], __DIR__ . '/img');
+        if ($erreurPhoto !== null) {
+            $errors[] = $erreurPhoto;
+        }
+    }
 
     if (empty($errors)) {
         $stmt = $conn->prepare(
@@ -39,15 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())'
         );
         $stmt->bind_param(
-            'ssdissss',
+            'ssdisdsss',
             $nom,
             $desc,
             $prix,
             $stock,
             $marque,
             $eval,
-            $categorie,
             $statut,
+            $categorie,
             $filename
         );
         if ($stmt->execute()) {

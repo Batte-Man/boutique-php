@@ -1,0 +1,5 @@
+# Défense en profondeur : aucun script ne doit s'exécuter depuis le dossier des images.
+<FilesMatch "\.(php\d?|phtml|phar)$">
+    Require all denied
+</FilesMatch>
+php_flag engine off

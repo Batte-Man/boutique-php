@@ -2,6 +2,7 @@
 session_start();
 require_once 'db.php';
 require_once 'auth.php';
+require_once 'upload.php';
 
 if (empty($_SESSION['user_id']) || $_SESSION['user_role'] !== 'gerant') {
     header('Location: login.php');
@@ -19,20 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statut = in_array($_POST['statut'] ?? '', ['disponible','indisponible'], true)
         ? $_POST['statut'] : 'disponible';
 
-    if (!isset($_FILES['photo']) || $_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
-        $errors[] = 'La photo est requise.';
-    } else {
-        $allowed = ['image/jpeg','image/png'];
-        if (!in_array($_FILES['photo']['type'], $allowed, true)) {
-            $errors[] = 'Format de photo invalide (jpg, png).';
-        } else {
-            $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-            $filename = uniqid('prod_', true) . "." . $ext;
-            $dest = __DIR__ . '/img/' . $filename;
-            if (!move_uploaded_file($_FILES['photo']['tmp_name'], $dest)) {
-                $errors[] = 'Erreur lors de l\'enregistrement de la photo.';
-            }
-        }
+    [$filename, $erreurPhoto] = enregistrer_photo($_FILES['photo'] ?? [], __DIR__ . '/img');
+    if ($erreurPhoto !== null) {
+        $errors[] = $erreurPhoto;
     }
 
     if ($nom === '')    $errors[] = 'Le nom est requis.';

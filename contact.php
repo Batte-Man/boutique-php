@@ -1,12 +1,13 @@
 <?php
 session_start();
 require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/config.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 $name    = trim($_POST['name']    ?? '');
-$email   = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+$email   = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
 $message = trim($_POST['message'] ?? '');
 
 $errors = [];
@@ -23,15 +24,16 @@ if ($errors) {
 $mail = new PHPMailer(true);
 try {
     $mail->isSMTP();
-    $mail->Host       = 'smtp.example.com';
+    $mail->Host       = config('SMTP_HOST');
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'contact@example.com';
-    $mail->Password   = 'REDACTED';
+    $mail->Username   = config('SMTP_USER');
+    $mail->Password   = config('SMTP_PASS');
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = 587;
+    $mail->Port       = (int) config('SMTP_PORT', '587');
+    $mail->CharSet    = 'UTF-8';
 
-    $mail->setFrom('contact@example.com', 'IT Shop');
-    $mail->addAddress('contact@example.com');
+    $mail->setFrom(config('SMTP_USER'), 'IT Shop');
+    $mail->addAddress(config('CONTACT_EMAIL', config('SMTP_USER')));
     $mail->addReplyTo($email, $name);
 
     $mail->Subject = "Nouveau message de contact de $name";
@@ -43,7 +45,8 @@ try {
     $mail->send();
     $_SESSION['contact_success'] = 'Votre message a bien été envoyé !';
 } catch (Exception $e) {
-    $_SESSION['contact_errors'] = ["Erreur d'envoi : {$mail->ErrorInfo}"];
+    error_log('Envoi du formulaire de contact impossible : ' . $mail->ErrorInfo);
+    $_SESSION['contact_errors'] = ["Le message n'a pas pu être envoyé. Réessayez plus tard."];
 }
 
 header('Location: index.php#contact');

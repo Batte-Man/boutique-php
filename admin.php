@@ -68,18 +68,18 @@ $products = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             <tbody>
             <?php foreach($products as $p): ?>
             <tr>
-                <td><?= $p['id'] ?></td>
+                <td><?= htmlspecialchars((string) $p['id'], ENT_QUOTES) ?></td>
                 <td><?= htmlspecialchars($p['nom'], ENT_QUOTES) ?></td>
                 <td><?= number_format($p['prix'],2,',',' ') ?> €</td>
-                <td><?= $p['quantite_en_stock'] ?></td>
+                <td><?= htmlspecialchars((string) $p['quantite_en_stock'], ENT_QUOTES) ?></td>
                 <td><?= htmlspecialchars($p['statut'], ENT_QUOTES) ?></td>
-                <td><?= $p['evaluation_moyenne'] ?>/5</td>
-                <td><?= $p['categorie'] ?></td>
-                <td><?= $p['marque'] ?></td>
-                <td><?= $p['date_ajout'] ?></td>
+                <td><?= htmlspecialchars((string) $p['evaluation_moyenne'], ENT_QUOTES) ?>/5</td>
+                <td><?= htmlspecialchars((string) $p['categorie'], ENT_QUOTES) ?></td>
+                <td><?= htmlspecialchars((string) $p['marque'], ENT_QUOTES) ?></td>
+                <td><?= htmlspecialchars((string) $p['date_ajout'], ENT_QUOTES) ?></td>
                 <td>
                     <form method="post" action="detail_produit.php" class="d-inline">
-                        <input type="hidden" name="id" value="<?= $p['id'] ?>">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars((string) $p['id'], ENT_QUOTES) ?>">
                         <button class="btn btn-sm btn-primary">Détail</button>
                     </form>
                 </td>

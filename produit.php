@@ -54,9 +54,9 @@ if (!$p) {
                     <p class="card-text"><?= nl2br(htmlspecialchars($p['description'], ENT_QUOTES)) ?></p>
                     <ul class="list-group list-group-flush mb-3">
                         <li class="list-group-item"><strong>Prix :</strong> <?= number_format($p['prix'], 2, ',', ' ') ?> €</li>
-                        <li class="list-group-item"><strong>Stock :</strong> <?= $p['quantite_en_stock'] ?></li>
+                        <li class="list-group-item"><strong>Stock :</strong> <?= htmlspecialchars((string) $p['quantite_en_stock'], ENT_QUOTES) ?></li>
                         <li class="list-group-item"><strong>Marque :</strong> <?= htmlspecialchars($p['marque'], ENT_QUOTES) ?></li>
-                        <li class="list-group-item"><strong>Catégorie :</strong> <?= htmlspecialchars($p['categorie'], ENT_QUOTES)?? '' ?></li>
+                        <li class="list-group-item"><strong>Catégorie :</strong> <?= htmlspecialchars($p['categorie'] ?? '', ENT_QUOTES) ?></li>
                         <li class="list-group-item"><strong>Note moyenne :</strong> <?= round($p['evaluation_moyenne'], 1) ?>/5</li>
                     </ul>
                     <a href="index.php" class="btn btn-secondary w-100">Retour</a>

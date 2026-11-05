@@ -98,26 +98,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         <div class="row g-3">
             <div class="col-md-3">
                 <label class="form-label">Prix (€)</label>
-                <input type="number" step="0.01" name="prix" class="form-control" value="<?= $p['prix'] ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
+                <input type="number" step="0.01" name="prix" class="form-control" value="<?= htmlspecialchars((string) $p['prix'], ENT_QUOTES) ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
             </div>
             <div class="col-md-3">
                 <label class="form-label">Stock</label>
-                <input type="number" name="quantite_en_stock" class="form-control" value="<?= $p['quantite_en_stock'] ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
+                <input type="number" name="quantite_en_stock" class="form-control" value="<?= htmlspecialchars((string) $p['quantite_en_stock'], ENT_QUOTES) ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
             </div>
             <div class="col-md-3">
                 <label class="form-label">Marque</label>
-                <input type="text" name="marque" class="form-control" value="<?= $p['marque']  ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
+                <input type="text" name="marque" class="form-control" value="<?= htmlspecialchars((string) $p['marque'], ENT_QUOTES) ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
             </div>
             <div class="col-md-3">
                 <label class="form-label">Catégorie</label>
-                <input type="text" name="categorie" class="form-control" value="<?= $p['categorie'] ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
+                <input type="text" name="categorie" class="form-control" value="<?= htmlspecialchars((string) $p['categorie'], ENT_QUOTES) ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
             </div>
 
         </div>
         <div class="row g-3 mt-3">
             <div class="col-md-4">
                 <label class="form-label">Evaluation moyenne</label>
-                <input type="number" step="0.1" name="evaluation_moyenne" class="form-control" value="<?= $p['evaluation_moyenne'] ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
+                <input type="number" step="0.1" name="evaluation_moyenne" class="form-control" value="<?= htmlspecialchars((string) $p['evaluation_moyenne'], ENT_QUOTES) ?>" <?= $_SESSION['user_role']==='assistant'?'readonly':'' ?> required>
             </div>
             <?php if($_SESSION['user_role']==='gerant'): ?>
                 <div class="col-md-4">

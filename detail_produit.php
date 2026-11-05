@@ -50,20 +50,20 @@ if (!$product) {
         <div class="col-12 col-md-8">
             <div class="card">
                 <h1 class="mb-4 text-center card-title"><?= htmlspecialchars($product['nom'], ENT_QUOTES) ?></h1>
-                <img src="img/<?= htmlspecialchars($product['photo'], ENT_QUOTES)?? '' ?>" class="card-img-top" alt="<?= htmlspecialchars($product['nom'], ENT_QUOTES)?? '' ?>">
+                <img src="img/<?= htmlspecialchars($product['photo'] ?? '', ENT_QUOTES) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['nom'] ?? '', ENT_QUOTES) ?>">
                 <div class="card-body">
                     <p class="card-text mb-3"><strong>Description :</strong> <?= nl2br(htmlspecialchars($product['description'], ENT_QUOTES)) ?></p>
                     <ul class="list-group list-group-flush mb-3">
                         <li class="list-group-item"><strong>Prix :</strong> <?= number_format($product['prix'], 2, ',', ' ') ?> €</li>
-                        <li class="list-group-item"><strong>Marque :</strong> <?= htmlspecialchars($product['marque'], ENT_QUOTES)?? '' ?></li>
-                        <li class="list-group-item"><strong>Stock :</strong> <?= $product['stock'] ?></li>
-                        <li class="list-group-item"><strong>Statut :</strong> <?= htmlspecialchars($product['statut'], ENT_QUOTES)?? '' ?></li>
-                        <li class="list-group-item"><strong>Date d'ajout :</strong> <?= $product['date_ajout'] ?></li>
-                        <li class="list-group-item"><strong>Evaluation moyenne :</strong> <?= htmlspecialchars($product['evaluation_moyenne'], ENT_QUOTES)?? '' ?></li>
-                        <li class="list-group-item"><strong>Catégorie :</strong> <?= htmlspecialchars($product['categorie'], ENT_QUOTES)?? '' ?></li>
+                        <li class="list-group-item"><strong>Marque :</strong> <?= htmlspecialchars($product['marque'] ?? '', ENT_QUOTES) ?></li>
+                        <li class="list-group-item"><strong>Stock :</strong> <?= htmlspecialchars((string) $product['stock'], ENT_QUOTES) ?></li>
+                        <li class="list-group-item"><strong>Statut :</strong> <?= htmlspecialchars($product['statut'] ?? '', ENT_QUOTES) ?></li>
+                        <li class="list-group-item"><strong>Date d'ajout :</strong> <?= htmlspecialchars((string) $product['date_ajout'], ENT_QUOTES) ?></li>
+                        <li class="list-group-item"><strong>Evaluation moyenne :</strong> <?= htmlspecialchars($product['evaluation_moyenne'] ?? '', ENT_QUOTES) ?></li>
+                        <li class="list-group-item"><strong>Catégorie :</strong> <?= htmlspecialchars($product['categorie'] ?? '', ENT_QUOTES) ?></li>
                     </ul>
                     <form method="post" action="edit_produit.php" class="d-inline">
-                        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars((string) $product['id'], ENT_QUOTES) ?>">
                         <button class="btn btn-sm btn-primary">Editer</button>
                     </form>
                     <a href="admin.php" class="btn btn-secondary w-100">Retour au dashboard</a>
